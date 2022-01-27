@@ -1,12 +1,17 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import { Provider } from 'react-redux';
 
-import { findElementByTestAttr } from './test/testUtils';
-import App from './App';
+import { findElementByTestAttr, storeFactory } from './test/testUtils';
+import Jotto from './Jotto';
 
-const setup = (state = {}) => {
-  // TODO: apply state
-  const wrapper = mount(<App />);
+const setup = (initialState = {}) => {
+  const store = storeFactory(initialState);
+  const wrapper = mount(
+    <Provider store={store}>
+      <Jotto />
+    </Provider>,
+  );
 
   // add value to input box
   const inputBox = findElementByTestAttr(wrapper, 'input-box');
@@ -19,7 +24,7 @@ const setup = (state = {}) => {
   return wrapper;
 };
 
-describe.skip('no words guessed', () => {
+describe('no words guessed', () => {
   let wrapper;
 
   beforeEach(() => {
@@ -36,7 +41,7 @@ describe.skip('no words guessed', () => {
   });
 });
 
-describe.skip('some words guessed', () => {
+describe('some words guessed', () => {
   let wrapper;
 
   beforeEach(() => {
@@ -53,13 +58,13 @@ describe.skip('some words guessed', () => {
   });
 });
 
-describe.skip('guess secret word', () => {
+describe('guess secret word', () => {
   let wrapper;
 
   beforeEach(() => {
     wrapper = setup({
       secretWord: 'party',
-      success: true,
+      success: false,
       guessedWords: [{ guessedWord: 'agile', letterMatchCount: 1 }],
     });
 
@@ -74,7 +79,7 @@ describe.skip('guess secret word', () => {
 
   it('adds row to GuessedWords table', () => {
     const guessedWordRows = findElementByTestAttr(wrapper, 'guessed-word');
-    expect(guessedWordRows).toHaveLength(2);
+    expect(guessedWordRows).toHaveLength(3);
   });
 
   it('display congrats component', () => {

@@ -1,4 +1,4 @@
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
 
 import { findElementByTestAttr, storeFactory } from '../test/testUtils';
@@ -8,18 +8,6 @@ import Jotto from './Jotto';
 // activate global mock to make sure getSecretWord doesn't make a network call
 jest.mock('../actions');
 
-describe('Jotto', () => {
-  let wrapper;
-
-  beforeEach(() => {
-    wrapper = shallow(<Jotto />);
-  });
-
-  it('renders without error', () => {
-    const counterComponent = findElementByTestAttr(wrapper, 'component-jotto');
-    expect(counterComponent).toHaveLength(1);
-  });
-});
 const setup = (initialState = {}) => {
   const store = storeFactory(initialState);
 
@@ -30,6 +18,19 @@ const setup = (initialState = {}) => {
     </Provider>,
   );
 };
+
+describe('Jotto', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = setup();
+  });
+
+  it('renders without error', () => {
+    const counterComponent = findElementByTestAttr(wrapper, 'component-jotto');
+    expect(counterComponent).toHaveLength(1);
+  });
+});
 
 describe('get secret word', () => {
   let wrapper;
